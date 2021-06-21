@@ -91,4 +91,16 @@ smb: \> exit
 
 We can get **prod.dtsConfig** file.
 
-### 4. 
+### 4. Try to connect SQL Sever, 1433/TCP
+Nomarly we use ```sqlcmd``` command to connect SQL Server, but it seems that its command is ***not*** supported for KALI Linux.
+So, we try to another way to do.
+Then, I used ```pyodbc``` lib of python, so try to install ```pyodbc```.
+
+```$ sudo pip install pyodbc ```
+
+But error happend and cannot install.
+So, install ```unixodbc-dev```.
+
+```$ sudo apt install unixodbc-dev```
+
+and retry to install ```pyodbc```.
