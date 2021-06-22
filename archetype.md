@@ -1,4 +1,4 @@
-### 1. Port scan using nmap.
+### 1. Port scan using nmap
 
 ```
 $ nmap -A 10.10.10.27
@@ -59,7 +59,7 @@ This server uses SMB (TCP:445) and therefore open 135 and 139(need for SMB).
 So, try to connect SMB.
  
 ```
-smbclient -L 10.10.10.27
+$ smbclient -L 10.10.10.27
 Enter WORKGROUP\tk's password: 
 
 	Sharename       Type      Comment
@@ -90,17 +90,25 @@ smb: \> exit
 ```
 
 We can get **prod.dtsConfig** file.
+The user name and password for SQL Server are written in this file.
 
 ### 4. Try to connect SQL Sever, 1433/TCP
 Nomarly we use ```sqlcmd``` command to connect SQL Server, but it seems that its command is ***not*** supported for KALI Linux.
-So, we try to another way to do.
-Then, I used ```pyodbc``` lib of python, so try to install ```pyodbc```.
 
-```$ sudo pip install pyodbc ```
+So, we have to use another mssql client tools for Kali.
+I searched the words "Kali mssql client github" on Google and found impacket which I wanted.
 
-But error happend and cannot install.
-So, install ```unixodbc-dev```.
+```
+$ git clone https://github.com/SecureAuthCorp/impacket.git
+$ cd impacket
+$ python3 -m pip install .
+```
 
-```$ sudo apt install unixodbc-dev```
+and try to connect SSIS(SQL Server).
 
-and retry to install ```pyodbc```.
+```
+$ cd example
+# python3 mssqlclient.py ID@host
+$ python3 mssqlclient.py 
+```
+
