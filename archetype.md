@@ -108,7 +108,18 @@ and try to connect SSIS(SQL Server).
 
 ```
 $ cd example
-# python3 mssqlclient.py ID@host
-$ python3 mssqlclient.py 
+# ex) $ python3 mssqlclient.py ID@host -windows-auth
+$ python3 mssqlclient.py ARCHETYPE/sql_svc@10.10.10.27 -windows-auth
 ```
 
+Check this user's group.
+If this user belongs to 'sysadmin', you can use ```xp_cmdshell $comannd_name``` which can execuite commands on SQL.
+Japanese specification is below.
+https://docs.microsoft.com/ja-jp/sql/t-sql/functions/is-srvrolemember-transact-sql?view=sql-server-ver15
+
+```
+SQL> IF IS_SRVROLEMEMBER('sysadmin') = 1 print 'sysadmin';
+[*] INFO(ARCHETYPE): Line 1: sysadmin
+```
+
+Fourtunately, this user belogs to 'sysadmin'.
