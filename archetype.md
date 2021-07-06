@@ -319,6 +319,6 @@ while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;
     $sendback2 = $sendback + "# ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2)
 ```
 
-The [ref1](https://qiita.com/LazarusMakoto/items/631af8aba4079f82c7c3 "ref1"), [ref2](https://www.vwnet.jp/Windows/PowerShell/Ope/OpeListg.htm "ref2"), [ref3](https://qiita.com/minr/items/b4f71dad4438707d84d3 "ref3"), [ref4](https://win.just4fun.biz/?PowerShell/%E6%96%87%E5%AD%97%E5%88%97%E3%82%92%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%A8%E3%81%97%E3%81%A6%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B%E3%83%BBInvoke-Expression "ref4") may help you to understand what the code means.
+The [ref0](https://stackoverflow.com/questions/47193282/what-does-bytebytes-0-655350-mean-in-powershell "ref0"), [ref1](https://qiita.com/LazarusMakoto/items/631af8aba4079f82c7c3 "ref1"), [ref2](https://www.vwnet.jp/Windows/PowerShell/Ope/OpeListg.htm "ref2"), [ref3](https://qiita.com/minr/items/b4f71dad4438707d84d3 "ref3"), [ref4](https://win.just4fun.biz/?PowerShell/%E6%96%87%E5%AD%97%E5%88%97%E3%82%92%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%A8%E3%81%97%E3%81%A6%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B%E3%83%BBInvoke-Expression "ref4") may help you to understand what the code means.
 To put it simply, this code sends a command, displays the returned string, and accepts the command again.
 
