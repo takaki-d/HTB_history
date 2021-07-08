@@ -404,8 +404,6 @@ Password:
 Microsoft Windows [Version 10.0.17763.107]
 (c) 2018 Microsoft Corporation. All rights reserved.
 
-C:\Windows\system32>ls
-b"'ls' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n"
 C:\Windows\system32>dir
  Volume in drive C has no label.
  Volume Serial Number is CE13-2325
@@ -437,8 +435,6 @@ C:\Users\Administrator\Desktop>dir
                1 File(s)             32 bytes
                2 Dir(s)  33,833,037,824 bytes free
 
-C:\Users\Administrator\Desktop>cat root.txt
-b"'cat' is not recognized as an internal or external command,\r\noperable program or batch file.\r\n"
 C:\Users\Administrator\Desktop>type root.txt
 b91XXXXXXXXXXXXXXXXXXXXXXXXXXX28
 
@@ -448,4 +444,4 @@ b91XXXXXXXXXXXXXXXXXXXXXXXXXXX28
 Finally, we can get root.txt on its Desktop directory.
 
 written by taka.
-Please leave your comments if you have trouble.
+Please leave your comments if you have any trouble.
