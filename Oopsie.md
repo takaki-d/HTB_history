@@ -14,10 +14,23 @@ SSHはマシン管理者の整備用であると思われるため，
 80番を中心に見ていく．
 
 ### 2. Webアプリケーションへの攻撃
-Webページの脆弱性診断をするために，Burp Suiteを使用する．
-Burp Suiteの設定はFox Proxyを利用すると簡単に設定，変更ができる．
-詳しくは以下を参照してほしい．
-Burp SuiteのTarget->Site mapから
+ブラウザでhttp://10.10.10.28/ にアクセスするが，あまり情報が得られず．
+そこでプロキシツールにより通信を見るために，Burp Suiteを使用する．
+（この工程はブラウザの開発オプションで代用可能）
+Burp Suiteの設定はFoxy Proxyを利用すると簡単に設定，変更ができる．
+詳しくは以下を参照してほしい[1]
+(https://ztetez.hatenablog.com/entry/2019/04/06/165943 "1")．
+Burp SuiteのTarget->Site mapからcdn-cgi/login/というディレクトリがあることが分かる．
+
+Webブラウザで，http://10.10.10.28/cdn-cgi/login にアクセスする．
+ログインフォームに，前回のマシンであるArchetypeで入手したパスワードを入力する．
+```
+Username : administrator
+Password : MEGACORP_4dm1n!!
+```
+ログイン後，Uploadsページはsuper adminユーザが必要であるとわかる．
+
+
 
 ```
 $ gobuster dir -w /usr/share/wordlists/dirb/common.txt -u http://10.10.10.28/
