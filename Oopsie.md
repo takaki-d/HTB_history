@@ -18,8 +18,7 @@ SSHはマシン管理者の整備用であると思われるため，
 そこでプロキシツールにより通信を見るために，Burp Suiteを使用する．
 （この工程はブラウザの開発オプションで代用可能）
 Burp Suiteの設定はFoxy Proxyを利用すると簡単に設定，変更ができる．
-詳しくは以下を参照してほしい[1]
-(https://ztetez.hatenablog.com/entry/2019/04/06/165943 "1")．
+詳しくは以下を参照してほしい[1](https://ztetez.hatenablog.com/entry/2019/04/06/165943 "1")．
 Burp SuiteのTarget->Site mapからcdn-cgi/login/というディレクトリがあることが分かる．
 
 Webブラウザで，http://10.10.10.28/cdn-cgi/login にアクセスする．
@@ -29,6 +28,12 @@ Username : administrator
 Password : MEGACORP_4dm1n!!
 ```
 ログイン後，Uploadsページはsuper adminユーザが必要であるとわかる．
+また，Burpでプロキシをかませた後，アップロードページを見ると，以下のメソッドが送信されていることが分かる．
+```
+GET /cdn-cgi/login/admin.php?content=accounts&id=1
+```
+このことから，id=の後の数字を変えることで，ログインしているユーザを変えることができることに気づく．
+そこで，Burpで自動にそれらをしてくれるIntruderにこの通信内容を投げる(Proxy->HTTP history から該当の通信を右クリック->IntruderまたはCtrl-I)．
 
 
 
