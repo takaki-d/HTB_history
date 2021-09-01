@@ -34,9 +34,14 @@ GET /cdn-cgi/login/admin.php?content=accounts&id=1
 ```
 このことから，id=の後の数字を変えることで，ログインしているユーザを変えることができることに気づく．
 そこで，Burpで自動にそれらをしてくれるIntruderにこの通信内容を投げる(Proxy->HTTP history から該当の通信を右クリック->IntruderまたはCtrl-I)．
+また，下準備にターミナルで以下を入力し，出力をコピーしておく(forループで1~100までの数字を出力するだけ)．
+```
+for x in $(seq 1 100);do echo $x;
+```
+Intruder->Payload Options\[Simple list\]の欄に
 
 
-
+### 2. 
 ```
 $ gobuster dir -w /usr/share/wordlists/dirb/common.txt -u http://10.10.10.28/
 ===============================================================
