@@ -40,7 +40,7 @@ for x in $(seq 1 100);do echo $x;
 ```
 Intruder->Payload Options\[Simple list\]の欄に張り付け，Optionタブから，Redirections->Follow redirectionsをAlwaysにし，Process cookies in redirectionsにチェックを入れる．
 
-![IDの変更](./pictures/p1.png "Burp1")
+![IDの変更](./pictures/Ooposie/p1.png "Burp1")
 
 
 
