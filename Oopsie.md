@@ -18,7 +18,7 @@ SSHはマシン管理者の整備用であると思われるため，
 そこでプロキシツールにより通信を見るために，Burp Suiteを使用する．
 （この工程はブラウザの開発オプションで代用可能）
 Burp Suiteの設定はFoxy Proxyを利用すると簡単に設定，変更ができる．
-詳しくは以下を参照してほしい[1](https://ztetez.hatenablog.com/entry/2019/04/06/165943 "1")．
+詳しくは以下を参照してほしい\[[1](https://ztetez.hatenablog.com/entry/2019/04/06/165943 "1")\]．
 Burp SuiteのTarget->Site mapからcdn-cgi/login/というディレクトリがあることが分かる．
 
 Webブラウザで，http://10.10.10.28/cdn-cgi/login にアクセスする．
@@ -40,7 +40,7 @@ GET /cdn-cgi/login/admin.php?content=accounts&id=1
 for x in $(seq 1 100);do echo $x;
 ```
 Intruder->Payload Options\[Simple list\]の欄に張り付け，Optionタブから，Redirections->Follow redirectionsをAlwaysにし，Process cookies in redirectionsにチェックを入れる．
-（※Follow redirectionsは、リダイレクトする際にクリックが必要なWeb UIがあったときに自動的に遷移させる，Process cookies in redirectionsはリダイレクト先にもcookieを転送する設定[2](https://portswigger.net/burp/documentation/desktop/tools/repeater/options "2")）
+（※Follow redirectionsは、リダイレクトする際にクリックが必要なWeb UIがあったときに自動的に遷移させる，Process cookies in redirectionsはリダイレクト先にもcookieを転送する設定\[[2](https://portswigger.net/burp/documentation/desktop/tools/repeater/options "2")）\]
 attackをクリックし，攻撃を実行すると以下の図のようになる．
 
 ![IDの変更](./pictures/Oopsie/p1.png "Burp1")
