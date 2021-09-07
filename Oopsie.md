@@ -40,14 +40,24 @@ GET /cdn-cgi/login/admin.php?content=accounts&id=1
 for x in $(seq 1 100);do echo $x;
 ```
 Intruder->Payload Options\[Simple list\]の欄に張り付け，Optionタブから，Redirections->Follow redirectionsをAlwaysにし，Process cookies in redirectionsにチェックを入れる．
-
-attackをクリックし，
-
-
+（※Follow redirectionsは、リダイレクトする際にクリックが必要なWeb UIがあったときに自動的に遷移させる，Process cookies in redirectionsはリダイレクト先にもcookieを転送する設定[2](https://portswigger.net/burp/documentation/desktop/tools/repeater/options "2")）
+attackをクリックし，攻撃を実行すると以下の図のようになる．
 
 ![IDの変更](./pictures/Oopsie/p1.png "Burp1")
 
+実行をLengthでソートし，文字列の長さが通常とは異なるリクエストを中心に確認をしていく．
+Payloadが30であるリクエストを確認するとsuper adminであることがわかり，そのcookieは86576であることがわかる．
+このcookieを用いてsuper admin権限でuploadサイトに遷移する．
 
+
+
+![IDの変更](./pictures/Oopsie/p2.png "Burp2")
+
+
+![IDの変更](./pictures/Oopsie/p3.png "Burp3")
+
+
+![IDの変更](./pictures/Oopsie/p4.png "Burp4")
 
 
 
