@@ -53,6 +53,19 @@ Payloadが30であるリクエストを確認するとsuper adminであること
 
 ![IDの変更](./pictures/Oopsie/p2.png "Burp2")
 
+ステータスが200のコードが返ってきたので，成功である．
+レスポンスを右クリックをし，show response in browserをクリックする．
+
+Kaliにデフォルトで格納されているphp reverse shellをコピーし，test.phpとして保存する．
+
+```
+# cp /usr/share/webshells/php/php-reverse-shell.php ./test.php
+```
+
+test.phpの中身のipアドレスを自身のアドレス($ hostname -I コマンドの10.0.X.Xで始まるアドレス)とポート番号に変更する．
+編集後のphpファイルを先ほどのアップロードページに送信する．
+この時，プロキシはインターセプト（Proxy->Intercept->Intercept On）にする．
+そして以下のように先ほどのcookieに変更してSendを送信する．
 
 ![IDの変更](./pictures/Oopsie/p3.png "Burp3")
 
