@@ -150,6 +150,12 @@ $ cat /var/www/html/cdn-cgi/login/db.php
 <?php
 $conn = mysqli_connect('localhost','robert','M3g4C0rpUs3r!','garage');
 ?>
+```
+
+robertユーザにスイッチできるかを試す．
+
+
+```
 $ su robert
 su: must be run from a terminal
 $ find / -type f -group bugtracker 2>/dev/null
