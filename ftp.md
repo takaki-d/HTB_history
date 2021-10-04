@@ -1,3 +1,6 @@
+## FPTのチートシート
+
+FTPデフォルトID/Pass : anonymous
 
 ```
 ┌──(kali㉿kali)-[~]
